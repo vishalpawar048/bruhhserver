@@ -1,0 +1,22 @@
+{
+  "name": "fysin_server",
+  "version": "1.0.0",
+  "description": "Backend for Fysin App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vishalpawar048/fysin_server.git"
+  },
+  "keywords": [
+    "Fysin"
+  ],
+  "author": "Vishal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vishalpawar048/fysin_server/issues"
+  },
+  "homepage": "https://github.com/vishalpawar048/fysin_server#readme"
+}
