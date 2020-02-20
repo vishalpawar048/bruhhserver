@@ -1,11 +1,13 @@
 let {
-  addSlidingBannerService,
-  deleteSlidingBannerService,
-  getSlidingBannerService
+  addBannerService,
+  deleteBannerService,
+  getBannersService
 } = require("../services/bannerService");
 
-let addSlidingBanner = async (req, res) => {
+let addBanner = async (req, res) => {
   let body = req.body;
+  let type = req.body.type;
+
   let name = req.body.name;
   let category = req.body.category;
   let imgUrl = req.body.imgUrl;
@@ -14,9 +16,9 @@ let addSlidingBanner = async (req, res) => {
 
   let response;
 
-  if (name && category && imgUrl && keyword && sequence) {
+  if (type && name && category && imgUrl && keyword && sequence) {
     try {
-      let response = await addSlidingBannerService(body);
+      let response = await addBannerService(body);
       res.send(response);
     } catch (error) {
       res.send(error);
@@ -30,14 +32,15 @@ let addSlidingBanner = async (req, res) => {
   }
 };
 
-let deleteSlidingBanner = async (req, res) => {
-  let sequenceNumber = req.body.sequenceNumber;
+let deleteBanner = async (req, res) => {
+  let sequence = req.body.sequence;
+  let type = req.body.type;
 
   let response;
 
-  if (sequenceNumber) {
+  if (type && sequence) {
     try {
-      let response = await deleteSlidingBannerService(sequenceNumber);
+      let response = await deleteBannerService(type, sequence);
       res.send(response);
     } catch (error) {
       res.send(error);
@@ -45,23 +48,33 @@ let deleteSlidingBanner = async (req, res) => {
   } else {
     response = {
       Message: "Failed",
-      Status: "sequenceNumber is missing or empty"
+      Status: "type or sequence is missing"
     };
     res.send(response);
   }
 };
 
-let getSlidingBanners = async (req, res) => {
-  try {
-    let response = await getSlidingBannerService();
+let getBanners = async (req, res) => {
+  let type = req.body.type;
+  let response;
+  if (type) {
+    try {
+      response = await getBannersService(type);
+      res.send(response);
+    } catch (error) {
+      res.send(error);
+    }
+  } else {
+    response = {
+      Message: "Failed",
+      Status: "type is missing or empty"
+    };
     res.send(response);
-  } catch (error) {
-    res.send(error);
   }
 };
 
 module.exports = {
-  addSlidingBanner,
-  deleteSlidingBanner,
-  getSlidingBanners
+  addBanner,
+  deleteBanner,
+  getBanners
 };

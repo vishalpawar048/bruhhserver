@@ -1,9 +1,9 @@
-const { SlidingBanner } = require("../model/schema");
+const { Banner } = require("../model/schema");
 
-let addSlidingBannerService = body => {
-  let slidingBanner = new SlidingBanner(body);
+let addBannerService = body => {
+  let banner = new Banner(body);
   return new Promise((resolve, reject) => {
-    slidingBanner.save(function(err, result) {
+    banner.save(function(err, result) {
       if (err) {
         reject(err);
         // console.error("error in saveNewKeyword");
@@ -15,9 +15,9 @@ let addSlidingBannerService = body => {
   });
 };
 
-let deleteSlidingBannerService = sequenceNumber => {
+let deleteBannerService = (type, sequence) => {
   return new Promise((resolve, reject) => {
-    SlidingBanner.deleteOne({ sequence: { $eq: sequenceNumber } }, function(err, result) {
+    Banner.deleteOne({ type: { $eq: type }, sequence: { $eq: sequence } }, function(err, result) {
       if (err) {
         reject(err);
         // console.error("error in saveNewKeyword");
@@ -29,9 +29,9 @@ let deleteSlidingBannerService = sequenceNumber => {
   });
 };
 
-let getSlidingBannerService = () => {
+let getBannersService = type => {
   return new Promise((resolve, reject) => {
-    SlidingBanner.find(function(err, result) {
+    Banner.find({ type: { $eq: type } }, function(err, result) {
       if (err) {
         reject(err);
       } else {
@@ -42,12 +42,12 @@ let getSlidingBannerService = () => {
           })
         );
       }
-    });
+    }).sort({ sequence: 1 });
   });
 };
 
 module.exports = {
-  addSlidingBannerService,
-  deleteSlidingBannerService,
-  getSlidingBannerService
+  addBannerService,
+  deleteBannerService,
+  getBannersService
 };

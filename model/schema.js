@@ -4,7 +4,7 @@ var productSchema = new mongoose.Schema({
   name: String,
   price: String,
   website: String,
-  imgUrls: Array,
+  imgUrls: { type: Array },
   category: String,
   keywords: String,
   rating: String,
@@ -32,12 +32,33 @@ var newKeywordsSchema = new mongoose.Schema({
   query: String
 });
 
-var SlidingBannerSchema = new mongoose.Schema({
+var BannerSchema = new mongoose.Schema({
+  type: String,
   name: String,
   imgUrl: { type: Array, unique: true },
   category: String,
   keyword: String,
   sequence: { type: String, unique: true }
+});
+
+var CategorySchema = new mongoose.Schema({
+  name: String,
+  imgUrl: { type: Array, unique: true },
+  category: String,
+  keyword: String,
+  sequence: { type: String, unique: true }
+});
+
+var userSchema = new mongoose.Schema({
+  name: String,
+  emailId: String,
+  gender: String
+});
+
+var wishlistSchema = new mongoose.Schema({
+  emailId: String,
+  wishlist: Array,
+  gender: String
 });
 
 var Product = mongoose.model("Product", productSchema);
@@ -46,7 +67,11 @@ var WomenProduct = mongoose.model("Women", productSchema);
 var Gadget = mongoose.model("Gadget", productSchema);
 var NewKeyword = mongoose.model("NewKeyword", newKeywordsSchema);
 
-var SlidingBanner = mongoose.model("SlidingBanner", SlidingBannerSchema);
+var Category = mongoose.model("Category", CategorySchema);
+var Banner = mongoose.model("Banner", BannerSchema);
+
+var User = mongoose.model("User", userSchema);
+var Wishlist = mongoose.model("Wishlist", wishlistSchema);
 
 module.exports = {
   Product,
@@ -54,5 +79,8 @@ module.exports = {
   WomenProduct,
   Gadget,
   NewKeyword,
-  SlidingBanner
+  Banner,
+  Category,
+  User,
+  Wishlist
 };
