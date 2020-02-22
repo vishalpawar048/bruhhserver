@@ -10,6 +10,8 @@ const {
 const { regex } = require("./keywords");
 
 let getProductsByCategory = async (req, res) => {
+  console.log("****************[ getProductsByCategory ]*****************");
+
   let category = req.query.category;
   let response = await getProductByCategory(category);
   if (response) {
@@ -20,6 +22,8 @@ let getProductsByCategory = async (req, res) => {
 };
 
 let getProductsByKeyWords = async (req, res) => {
+  console.log("****************[ getProductsByKeyWords ]*****************");
+
   let category = req.body.category;
   let keyword = req.body.keyword;
   let response = await getProductsByKeyWordsService(category, keyword);
@@ -53,6 +57,8 @@ let getProductsByKeyWords = async (req, res) => {
 // };
 
 let addProduct = async (req, res) => {
+  console.log("****************[ addProduct ]*****************");
+
   let body = req.body;
   let category = req.body.category;
   let response;
@@ -74,6 +80,8 @@ let addProduct = async (req, res) => {
 };
 
 let updateProduct = async (req, res) => {
+  console.log("****************[ updateProduct ]*****************");
+
   let body = req.body;
   let id = req.body.URL;
   let category = req.body.category;
@@ -95,6 +103,8 @@ let updateProduct = async (req, res) => {
 };
 
 let deleteProduct = async (req, res) => {
+  console.log("****************[ deleteProduct ]*****************");
+
   let url = req.body.url;
 
   let response;

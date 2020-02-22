@@ -6,6 +6,8 @@ let {
 } = require("../services/categoryService");
 
 let addCategory = async (req, res) => {
+  console.log("****************[ addCategory ]*****************");
+
   let body = req.body;
   let name = req.body.name;
   let category = req.body.category;
@@ -32,6 +34,8 @@ let addCategory = async (req, res) => {
 };
 
 let updateCategory = async (req, res) => {
+  console.log("****************[ updateCategory ]*****************");
+
   let body = req.body;
   let id = req.body.URL;
   let category = req.body.category;
@@ -53,6 +57,8 @@ let updateCategory = async (req, res) => {
 };
 
 let getCategories = async (req, res) => {
+  console.log("****************[ getCategories ]*****************");
+
   try {
     let response = await getCategoriesService();
     res.send(response);
@@ -62,6 +68,8 @@ let getCategories = async (req, res) => {
 };
 
 let deleteCategory = async (req, res) => {
+  console.log("****************[ deleteCategory ]*****************");
+
   let categoryName = req.body.categoryName;
 
   let response;

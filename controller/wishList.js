@@ -7,6 +7,8 @@ const {
 const { checkAndUpdateUserDetails } = require("../services/userDetailsService");
 
 let addToWishlist = async (req, res) => {
+  console.log("****************[ addToWishlist ]*****************");
+
   let emailId = req.body.emailId;
   let productId = req.body.productId;
 
@@ -34,6 +36,8 @@ let addToWishlist = async (req, res) => {
 };
 
 let getWishlist = async (req, res) => {
+  console.log("****************[ getWishlist ]*****************");
+
   let emailId = req.params.emailId;
   let response = await getWishListByEmailService(emailId);
   let wishlist = await getWishlistByIds(response[0].wishlist);
@@ -45,6 +49,8 @@ let getWishlist = async (req, res) => {
 };
 
 let removefromWishlist = async (req, res) => {
+  console.log("****************[ removefromWishlist ]*****************");
+
   let emailId = req.body.emailId;
   let productId = req.body.productId;
 

@@ -5,6 +5,7 @@ let {
 } = require("../services/bannerService");
 
 let addBanner = async (req, res) => {
+  console.log("****************[ addBanner ]*****************");
   let body = req.body;
   let type = req.body.type;
 
@@ -33,6 +34,8 @@ let addBanner = async (req, res) => {
 };
 
 let deleteBanner = async (req, res) => {
+  console.log("****************[ deleteBanner ]*****************");
+
   let sequence = req.body.sequence;
   let type = req.body.type;
 
@@ -55,6 +58,8 @@ let deleteBanner = async (req, res) => {
 };
 
 let getBanners = async (req, res) => {
+  console.log("****************[ getBanners ]*****************");
+
   let type = req.body.type;
   let response;
   if (type) {
