@@ -39,8 +39,14 @@ let getWishlist = async (req, res) => {
   console.log("****************[ getWishlist ]*****************");
 
   let emailId = req.params.emailId;
+  let wishlist;
   let response = await getWishListByEmailService(emailId);
-  let wishlist = await getWishlistByIds(response[0].wishlist);
+  if (response) {
+    wishlist = await getWishlistByIds(response[0].wishlist);
+  } else {
+    wishlist = null;
+  }
+
   if (wishlist) {
     res.send(wishlist);
   } else {
