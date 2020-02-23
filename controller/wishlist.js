@@ -41,16 +41,16 @@ let getWishlist = async (req, res) => {
   let emailId = req.params.emailId;
   let wishlist;
   let response = await getWishListByEmailService(emailId);
-  if (response[0]) {
+  if (response) {
     wishlist = await getWishlistByIds(response[0].wishlist);
   } else {
     wishlist = null;
   }
 
   if (wishlist) {
-    res.send(wishlist);
+    res.send({ wishlist: wishlist, Status: "success" });
   } else {
-    res.send("Error");
+    res.send({ Status: "error" });
   }
 };
 
