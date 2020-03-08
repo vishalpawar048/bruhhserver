@@ -124,7 +124,7 @@ let getProductByKeyWords = (keyword, category) => {
   });
 };
 
-let getProductsByKeyWordsService = (category, keyword) => {
+let getProductsByKeyWordsService = keyword => {
   return new Promise((resolve, reject) => {
     Product.find(
       { $text: { $search: keyword } },
