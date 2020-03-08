@@ -49,8 +49,10 @@ let addProductToDb = (body, category) => {
 };
 
 let getProductByCategory = category => {
-  //var product;
-  // if (category === "men") {
+  var product;
+  // if(category === "new"){
+
+  // }else if (category === "men") {
   //   product = MenProduct;
   // } else if (category === "women") {
   //   product = WomenProduct;
@@ -61,18 +63,33 @@ let getProductByCategory = category => {
   // }
 
   return new Promise((resolve, reject) => {
-    Product.find(function(err, result) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(
-          (response = {
-            Product: result,
-            Status: `Success`
-          })
-        );
-      }
-    });
+    if (category === "new") {
+      Product.find(function(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`
+            })
+          );
+        }
+      }).sort({ _id: -1 });
+    } else {
+      Product.find({ category: category }, function(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`
+            })
+          );
+        }
+      });
+    }
   });
 };
 
