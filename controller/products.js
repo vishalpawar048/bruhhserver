@@ -12,7 +12,7 @@ const { regex } = require("./keywords");
 let getProductsByCategory = async (req, res) => {
   console.log("****************[ getProductsByCategory ]*****************");
 
-  let category = req.body.category;
+  let category = req.body.category.toLowerCase();
   let response = await getProductByCategory(category);
   if (response) {
     res.send(response);
@@ -24,8 +24,8 @@ let getProductsByCategory = async (req, res) => {
 let getProductsByKeyWords = async (req, res) => {
   console.log("****************[ getProductsByKeyWords ]*****************");
 
-  let category = req.body.category;
-  let keyword = req.body.keyword;
+  let category = req.body.category.toLowerCase();
+  let keyword = req.body.keyword.toLowerCase();
   let response = await getProductsByKeyWordsService(category, keyword);
   if (response) {
     res.send(response);
