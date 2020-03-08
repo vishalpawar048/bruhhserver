@@ -7,7 +7,7 @@ const wishlist = require("./controller/wishlist");
 //Products
 route.post("/products/addProduct", products.addProduct);
 route.post("/products/updateProduct", products.updateProduct);
-route.get("/products/getProductsByCategory/", products.getProductsByCategory);
+route.post("/products/getProductsByCategory/", products.getProductsByCategory);
 route.post("/products/getProductsByKeyWords/", products.getProductsByKeyWords);
 //route.post("/products/getProducts", products.getProducts);
 route.get("categories/deleteProduct", products.deleteProduct);

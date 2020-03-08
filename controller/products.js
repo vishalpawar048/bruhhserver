@@ -12,7 +12,7 @@ const { regex } = require("./keywords");
 let getProductsByCategory = async (req, res) => {
   console.log("****************[ getProductsByCategory ]*****************");
 
-  let category = req.query.category;
+  let category = req.body.category;
   let response = await getProductByCategory(category);
   if (response) {
     res.send(response);
