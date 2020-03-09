@@ -13,7 +13,8 @@ let getProductsByCategory = async (req, res) => {
   console.log("****************[ getProductsByCategory ]*****************");
 
   let category = req.body.category.toLowerCase();
-  let response = await getProductByCategory(category);
+  let subCategory = req.body.subCategory.toLowerCase();
+  let response = await getProductByCategory(category, subCategory);
   if (response) {
     res.send(response);
   } else {
@@ -24,9 +25,9 @@ let getProductsByCategory = async (req, res) => {
 let getProductsByKeyWords = async (req, res) => {
   console.log("****************[ getProductsByKeyWords ]*****************");
 
-  // let category = req.body.category.toLowerCase();
+  let category = req.body.category.toLowerCase();
   let keyword = req.body.keyword.toLowerCase();
-  let response = await getProductsByKeyWordsService(keyword);
+  let response = await getProductsByKeyWordsService(category, keyword);
   if (response) {
     res.send(response);
   } else {

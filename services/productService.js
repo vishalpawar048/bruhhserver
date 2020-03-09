@@ -48,8 +48,7 @@ let addProductToDb = (body, category) => {
   });
 };
 
-let getProductByCategory = category => {
-  var product;
+let getProductByCategory = (category, subCategory) => {
   // if(category === "new"){
 
   // }else if (category === "men") {
@@ -76,6 +75,22 @@ let getProductByCategory = category => {
           );
         }
       }).sort({ _id: -1 });
+    } else if (subCategory) {
+      Product.find(
+        { $and: [{ category: { $eq: category } }, { subCategory: { $eq: subCategory } }] },
+        function(err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(
+              (response = {
+                Product: result,
+                Status: `Success`
+              })
+            );
+          }
+        }
+      );
     } else {
       Product.find({ category: category }, function(err, result) {
         if (err) {
@@ -124,13 +139,13 @@ let getProductByKeyWords = (keyword, category) => {
   });
 };
 
-let getProductsByKeyWordsService = keyword => {
+let getProductsByKeyWordsService = (category, keyword) => {
   return new Promise((resolve, reject) => {
     Product.find(
-      { $text: { $search: keyword } },
-      { score: { $meta: "textScore" } },
-      // { $and: [{ category: { $eq: category } }, { $text: { $search: keyword } }] },
+      // { $text: { $search: keyword } },
       // { score: { $meta: "textScore" } },
+      { $and: [{ category: { $eq: category } }, { $text: { $search: keyword } }] },
+      { score: { $meta: "textScore" } },
       function(err, result) {
         if (err) {
           reject(err);
