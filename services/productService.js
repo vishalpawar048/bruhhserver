@@ -139,13 +139,13 @@ let getProductByKeyWords = (keyword, category) => {
   });
 };
 
-let getProductsByKeyWordsService = (category, keyword) => {
+let getProductsByKeyWordsService = keyword => {
   return new Promise((resolve, reject) => {
     Product.find(
-      // { $text: { $search: keyword } },
-      // { score: { $meta: "textScore" } },
-      { $and: [{ category: { $eq: category } }, { $text: { $search: keyword } }] },
+      { $text: { $search: keyword } },
       { score: { $meta: "textScore" } },
+      // { $and: [{ category: { $eq: category } }, { $text: { $search: keyword } }] },
+      // { score: { $meta: "textScore" } },
       function(err, result) {
         if (err) {
           reject(err);

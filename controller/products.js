@@ -25,9 +25,9 @@ let getProductsByCategory = async (req, res) => {
 let getProductsByKeyWords = async (req, res) => {
   console.log("****************[ getProductsByKeyWords ]*****************");
 
-  let category = req.body.category.toLowerCase();
+  //let category = req.body.category.toLowerCase();
   let keyword = req.body.keyword.toLowerCase();
-  let response = await getProductsByKeyWordsService(category, keyword);
+  let response = await getProductsByKeyWordsService(keyword);
   if (response) {
     res.send(response);
   } else {
