@@ -3,6 +3,11 @@ const products = require("./controller/products");
 const banners = require("./controller/banners");
 const categories = require("./controller/categories");
 const wishlist = require("./controller/wishlist");
+const user = require("./controller/user");
+
+//User
+
+route.post("/user/saveFcmToken", user.saveFcmToken);
 
 //Products
 route.post("/products/addProduct", products.addProduct);
@@ -10,7 +15,7 @@ route.post("/products/updateProduct", products.updateProduct);
 route.post("/products/getProductsByCategory/", products.getProductsByCategory);
 route.post("/products/getProductsByKeyWords/", products.getProductsByKeyWords);
 //route.post("/products/getProducts", products.getProducts);
-route.get("categories/deleteProduct", products.deleteProduct);
+route.post("/products/deleteProduct", products.deleteProduct);
 
 //Categories
 route.post("categories/addCategory", categories.addCategory);

@@ -8,7 +8,7 @@ const { checkAndUpdateUserDetails } = require("../services/userDetailsService");
 
 let addToWishlist = async (req, res) => {
   console.log("****************[ addToWishlist ]*****************");
-
+  let fcmToken = req.body.fcmToken;
   let emailId = req.body.emailId;
   let productId = req.body.productId;
 
@@ -16,7 +16,7 @@ let addToWishlist = async (req, res) => {
 
   if (emailId) {
     try {
-      let userDetails = await checkAndUpdateUserDetails(emailId);
+      let userDetails = await checkAndUpdateUserDetails(fcmToken, emailId);
       if (userDetails.user) {
         let response = await addWishListToDb(emailId, productId);
         res.send(response);
@@ -57,6 +57,7 @@ let getWishlist = async (req, res) => {
 let removefromWishlist = async (req, res) => {
   console.log("****************[ removefromWishlist ]*****************");
 
+  let fcmToken = req.body.fcmToken;
   let emailId = req.body.emailId;
   let productId = req.body.productId;
 
@@ -64,7 +65,7 @@ let removefromWishlist = async (req, res) => {
 
   if (emailId) {
     try {
-      let userDetails = await checkAndUpdateUserDetails(emailId);
+      let userDetails = await checkAndUpdateUserDetails(fcmToken, emailId);
       if (userDetails.user) {
         let response = await removefromWishlistService(emailId, productId);
         res.send(response);

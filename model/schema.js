@@ -53,7 +53,9 @@ var CategorySchema = new mongoose.Schema({
 var userSchema = new mongoose.Schema({
   name: String,
   emailId: String,
-  gender: String
+  gender: String,
+  fcmToken: String,
+  date: String
 });
 
 var wishlistSchema = new mongoose.Schema({

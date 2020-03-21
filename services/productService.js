@@ -194,9 +194,9 @@ let updateProductById = (body, category, id) => {
   });
 };
 
-let deleteProductService = url => {
+let deleteProductService = id => {
   return new Promise((resolve, reject) => {
-    Category.deleteOne({ url: { $eq: url } }, function(err, result) {
+    Product.findOneAndDelete({ _id: id }, function(err, result) {
       if (err) {
         reject(err);
         // console.error("error in saveNewKeyword");

@@ -106,13 +106,13 @@ let updateProduct = async (req, res) => {
 let deleteProduct = async (req, res) => {
   console.log("****************[ deleteProduct ]*****************");
 
-  let url = req.body.url;
+  let id = req.body.id;
 
   let response;
 
-  if (url) {
+  if (id) {
     try {
-      let response = await deleteProductService(url);
+      let response = await deleteProductService(id);
       res.send(response);
     } catch (error) {
       res.send(error);
