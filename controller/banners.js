@@ -8,16 +8,11 @@ let addBanner = async (req, res) => {
   console.log("****************[ addBanner ]*****************");
   let body = req.body;
   let type = req.body.type;
-
-  let name = req.body.name;
-  let category = req.body.category;
-  let imgUrl = req.body.imgUrl;
-  let keyword = req.body.keyword;
-  let sequence = req.body.sequence;
+  let banners = req.body.banners;
 
   let response;
 
-  if (type && name && category && imgUrl && keyword && sequence) {
+  if (type && banners) {
     try {
       let response = await addBannerService(body);
       res.send(response);
@@ -26,8 +21,7 @@ let addBanner = async (req, res) => {
     }
   } else {
     response = {
-      Product: product,
-      Status: "name, category,imgUrl,keyword,sequence on of this parameter is missing or empty"
+      Status: "type or banners parameter is missing or empty"
     };
     res.send(response);
   }
@@ -65,7 +59,7 @@ let getBanners = async (req, res) => {
   if (type) {
     try {
       response = await getBannersService(type);
-      res.send(response);
+      res.send(response[0]);
     } catch (error) {
       res.send(error);
     }

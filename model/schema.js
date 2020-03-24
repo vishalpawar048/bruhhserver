@@ -33,13 +33,18 @@ var newKeywordsSchema = new mongoose.Schema({
   query: String
 });
 
+// var BannerSchema = new mongoose.Schema({
+//   type: String,
+//   name: String,
+//   imgUrl: { type: Array, unique: true },
+//   category: String,
+//   keyword: String,
+//   sequence: { type: String, unique: true }
+// });
+
 var BannerSchema = new mongoose.Schema({
   type: String,
-  name: String,
-  imgUrl: { type: Array, unique: true },
-  category: String,
-  keyword: String,
-  sequence: { type: String, unique: true }
+  banners: Array
 });
 
 var CategorySchema = new mongoose.Schema({

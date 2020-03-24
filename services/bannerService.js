@@ -35,14 +35,9 @@ let getBannersService = type => {
       if (err) {
         reject(err);
       } else {
-        resolve(
-          (response = {
-            Banners: result,
-            Status: `Success`
-          })
-        );
+        resolve(result);
       }
-    }).sort({ sequence: 1 });
+    });
   });
 };
 
