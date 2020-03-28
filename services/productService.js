@@ -20,27 +20,17 @@ let saveNewKeyword = keyword => {
   });
 };
 
-let addProductToDb = (body, category) => {
-  var product = new Product(body);
-  // if (category === "men") {
-  //   product = new MenProduct(body);
-  // } else if (category === "women") {
-  //   product = new WomenProduct(body);
-  // } else if (category === "gadget") {
-  //   product = new Gadget(body);
-  // } else {
-  //   product = new Product(body);
-  // }
-
+let addProductToDb = body => {
+  // var product = new Product(body);
   return new Promise((resolve, reject) => {
-    product.save(function(err, result) {
+    Product.create(body, function(err, result) {
       if (err) {
         reject(err);
       } else {
         resolve(
           (response = {
             Product: result,
-            Status: `Product added Successfully in category: ${category}`
+            Status: `Product added Successfully in category`
           })
         );
       }
@@ -49,18 +39,6 @@ let addProductToDb = (body, category) => {
 };
 
 let getProductByCategory = (category, subCategory) => {
-  // if(category === "new"){
-
-  // }else if (category === "men") {
-  //   product = MenProduct;
-  // } else if (category === "women") {
-  //   product = WomenProduct;
-  // } else if (category === "gadget") {
-  //   product = Gadget;
-  // } else {
-  //   product = Product;
-  // }
-
   return new Promise((resolve, reject) => {
     if (category === "new") {
       Product.find(function(err, result) {
@@ -162,18 +140,9 @@ let getProductsByKeyWordsService = keyword => {
   });
 };
 
-let updateProductById = (body, category, id) => {
-  let product;
-  if (category === "men") {
-    product = MenProduct;
-  } else if (category === "women") {
-    product = WomenProduct;
-  } else {
-    product = Product;
-  }
-
+let updateProductById = (body, id) => {
   return new Promise((resolve, reject) => {
-    product.update(
+    Product.update(
       { url: id },
       {
         $set: body

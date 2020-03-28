@@ -4,7 +4,7 @@ var productSchema = new mongoose.Schema({
   name: String,
   price: String,
   website: String,
-  imgUrls: { type: Array },
+  imgUrls: Array,
   category: String,
   subCategory: String,
   keywords: String,

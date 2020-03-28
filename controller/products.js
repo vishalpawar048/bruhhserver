@@ -7,6 +7,8 @@ const {
   deleteProductService,
   getProductsByKeyWordsService
 } = require("../services/productService");
+const fs = require("fs");
+const csv = require("fast-csv");
 const { regex } = require("./keywords");
 
 let getProductsByCategory = async (req, res) => {
@@ -66,7 +68,7 @@ let addProduct = async (req, res) => {
 
   if (category) {
     try {
-      let response = await addProductToDb(body, category);
+      let response = await addProductToDb(body);
       res.send(response);
     } catch (error) {
       res.send(error);
@@ -126,10 +128,56 @@ let deleteProduct = async (req, res) => {
   }
 };
 
+let addProductCSV = async (req, res) => {
+  let productData = [];
+
+  if (req.file.path) {
+    await csv
+      .parseFile(req.file.path)
+      .on("data", function(data) {
+        let imgArray = [];
+        imgArray.push(data[3], data[4], data[5], data[6]),
+          productData.push({
+            name: data[0],
+            price: data[1],
+            website: data[2],
+            imgUrls: imgArray,
+            category: data[7],
+            subCategory: data[8],
+            keywords: data[9],
+            rating: data[10],
+            description: data[11],
+            url: data[12]
+          });
+      })
+      .on("end", async function() {
+        productData.shift();
+        fs.unlink("./tmp", err => {
+          if (err) throw err;
+          console.log("******* [ file Deleted Successfully ] ******");
+        });
+        try {
+          let response = await addProductToDb(productData);
+          res.send(response);
+        } catch (error) {
+          res.send(error);
+        } // remove temp file
+      });
+  } else {
+    try {
+      let response = await addProductToDb(req.body);
+      res.send(response);
+    } catch (error) {
+      res.send(error);
+    }
+  }
+};
+
 module.exports = {
   getProductsByCategory,
   getProductsByKeyWords,
   addProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  addProductCSV
 };

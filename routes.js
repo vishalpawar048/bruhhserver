@@ -4,6 +4,8 @@ const banners = require("./controller/banners");
 const categories = require("./controller/categories");
 const wishlist = require("./controller/wishlist");
 const user = require("./controller/user");
+const multer = require("multer");
+const upload = multer({ dest: "tmp/csv/" });
 
 //User
 
@@ -16,6 +18,7 @@ route.post("/products/getProductsByCategory/", products.getProductsByCategory);
 route.post("/products/getProductsByKeyWords/", products.getProductsByKeyWords);
 //route.post("/products/getProducts", products.getProducts);
 route.post("/products/deleteProduct", products.deleteProduct);
+route.post("/products/addProductCSV", upload.single("CSV"), products.addProductCSV);
 
 //Categories
 route.post("categories/addCategory", categories.addCategory);
