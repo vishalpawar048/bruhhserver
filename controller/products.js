@@ -10,6 +10,7 @@ const {
 const fs = require("fs");
 const csv = require("fast-csv");
 const { regex } = require("./keywords");
+var _ = require("lodash");
 
 let getProductsByCategory = async (req, res) => {
   console.log("****************[ getProductsByCategory ]*****************");
@@ -138,27 +139,33 @@ let addProductCSV = async (req, res) => {
         let imgArray = [];
         imgArray.push(data[3], data[4], data[5], data[6]),
           productData.push({
-            name: data[0],
+            name: _.upperFirst(data[0]),
             price: data[1],
-            website: data[2],
+            website: _.upperFirst(data[2]),
             imgUrls: imgArray,
-            category: data[7],
-            subCategory: data[8],
-            keywords: data[9],
+            category: data[7].toLowerCase(),
+            subCategory: data[8].toLowerCase(),
+            keywords: data[9].toLowerCase(),
             rating: data[10],
-            description: data[11],
+            description: _.upperFirst(data[11]),
             url: data[12]
           });
       })
       .on("end", async function() {
         productData.shift();
-        fs.unlink("./tmp", err => {
-          if (err) throw err;
-          console.log("******* [ file Deleted Successfully ] ******");
-        });
+        // fs.rmdir("./tmp/csv", err => {
+        //   if (err) throw err;
+        //   console.log("******* [ file Deleted Successfully ] ******");
+        // });
+        let response;
+        let resArray = [];
         try {
-          let response = await addProductToDb(productData);
-          res.send(response);
+          productData.forEach(ele => {
+            response = addProductToDb(ele);
+            resArray.push(response);
+          });
+
+          res.send(resArray);
         } catch (error) {
           res.send(error);
         } // remove temp file

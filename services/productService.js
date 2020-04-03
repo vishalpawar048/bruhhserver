@@ -21,9 +21,9 @@ let saveNewKeyword = keyword => {
 };
 
 let addProductToDb = body => {
-  // var product = new Product(body);
+  var product = new Product(body);
   return new Promise((resolve, reject) => {
-    Product.create(body, function(err, result) {
+    product.save(function(err, result) {
       if (err) {
         reject(err);
       } else {
