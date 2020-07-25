@@ -1,9 +1,9 @@
 const { Product, MenProduct, WomenProduct, Gadget, NewKeyword } = require("../model/schema");
 
-let saveNewKeyword = keyword => {
+let saveNewKeyword = (keyword) => {
   let newKeywords = new NewKeyword({ query: keyword });
   return new Promise((resolve, reject) => {
-    newKeywords.save(function(err, result) {
+    newKeywords.save(function (err, result) {
       if (err) {
         // reject(err);
         console.error("error in saveNewKeyword");
@@ -20,17 +20,17 @@ let saveNewKeyword = keyword => {
   });
 };
 
-let addProductToDb = body => {
+let addProductToDb = (body) => {
   var product = new Product(body);
   return new Promise((resolve, reject) => {
-    product.save(function(err, result) {
+    product.save(function (err, result) {
       if (err) {
         reject(err);
       } else {
         resolve(
           (response = {
             Product: result,
-            Status: `Product added Successfully in category`
+            Status: `Product added Successfully in category`,
           })
         );
       }
@@ -38,51 +38,51 @@ let addProductToDb = body => {
   });
 };
 
-let getProductByCategory = (category, subCategory) => {
+let getProductByCategory = (obj) => {
+  let query;
+  let sortQuery = obj.sort ? { price: obj.sort } : { _id: -1 };
+
+  if (!obj.website) {
+    obj.website = [];
+  }
+
+  if (obj.category === "new" && obj.website.length > 0) {
+    query = { website: { $in: obj.website } };
+  } else if (obj.category === "new" && obj.website.length == 0) {
+    query = {};
+  } else if (obj.subCategory && obj.website.length > 0) {
+    query = {
+      $and: [
+        { category: { $eq: obj.category } },
+        { subCategory: { $eq: obj.subCategory } },
+        { website: { $in: obj.website } },
+      ],
+    };
+  } else if (obj.subCategory && obj.website.length == 0) {
+    query = {
+      $and: [{ category: { $eq: obj.category } }, { subCategory: { $eq: obj.subCategory } }],
+    };
+  } else {
+    query = { category: obj.category };
+  }
+
   return new Promise((resolve, reject) => {
-    if (category === "new") {
-      Product.find(function(err, result) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(
-            (response = {
-              Product: result,
-              Status: `Success`
-            })
-          );
-        }
-      }).sort({ _id: -1 });
-    } else if (subCategory) {
-      Product.find(
-        { $and: [{ category: { $eq: category } }, { subCategory: { $eq: subCategory } }] },
-        function(err, result) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(
-              (response = {
-                Product: result,
-                Status: `Success`
-              })
-            );
-          }
-        }
-      );
-    } else {
-      Product.find({ category: category }, function(err, result) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(
-            (response = {
-              Product: result,
-              Status: `Success`
-            })
-          );
-        }
-      });
-    }
+    Product.find(query, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(
+          (response = {
+            Product: result,
+            Status: `Success`,
+          })
+        );
+      }
+    })
+      .sort(sortQuery)
+      .collation({ locale: "en_US", numericOrdering: true })
+      .skip(obj.page * obj.limit)
+      .limit(obj.limit);
   });
 };
 
@@ -98,7 +98,7 @@ let getProductByKeyWords = (keyword, category) => {
 
   return new Promise((resolve, reject) => {
     product
-      .find({ $text: { $search: keyword } }, { score: { $meta: "textScore" } }, function(
+      .find({ $text: { $search: keyword } }, { score: { $meta: "textScore" } }, function (
         err,
         result
       ) {
@@ -108,7 +108,7 @@ let getProductByKeyWords = (keyword, category) => {
           resolve(
             (response = {
               Product: result,
-              Status: `Success`
+              Status: `Success`,
             })
           );
         }
@@ -117,21 +117,21 @@ let getProductByKeyWords = (keyword, category) => {
   });
 };
 
-let getProductsByKeyWordsService = keyword => {
+let getProductsByKeyWordsService = (keyword) => {
   return new Promise((resolve, reject) => {
     Product.find(
       { $text: { $search: keyword } },
       { score: { $meta: "textScore" } },
       // { $and: [{ category: { $eq: category } }, { $text: { $search: keyword } }] },
       // { score: { $meta: "textScore" } },
-      function(err, result) {
+      function (err, result) {
         if (err) {
           reject(err);
         } else {
           resolve(
             (response = {
               Product: result,
-              Status: `Success`
+              Status: `Success`,
             })
           );
         }
@@ -145,16 +145,16 @@ let updateProductById = (body, id) => {
     Product.update(
       { url: id },
       {
-        $set: body
+        $set: body,
       },
-      function(err, result) {
+      function (err, result) {
         if (err) {
           reject(err);
         } else {
           resolve(
             (response = {
               Product: result,
-              Status: `Product updated Successfully in category: ${body}`
+              Status: `Product updated Successfully in category: ${body}`,
             })
           );
         }
@@ -163,9 +163,9 @@ let updateProductById = (body, id) => {
   });
 };
 
-let deleteProductService = id => {
+let deleteProductService = (id) => {
   return new Promise((resolve, reject) => {
-    Product.findOneAndDelete({ _id: id }, function(err, result) {
+    Product.findOneAndDelete({ _id: id }, function (err, result) {
       if (err) {
         reject(err);
         // console.error("error in saveNewKeyword");
@@ -176,6 +176,135 @@ let deleteProductService = id => {
     });
   });
 };
+
+let getProductByPriceService = (category, subCategory, sort) => {
+  return new Promise((resolve, reject) => {
+    if (category === "new") {
+      Product.find(function (err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`,
+            })
+          );
+        }
+      }).sort({ price: sort });
+    } else if (subCategory) {
+      Product.find(
+        { $and: [{ category: { $eq: category } }, { subCategory: { $eq: subCategory } }] },
+        function (err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(
+              (response = {
+                Product: result,
+                Status: `Success`,
+              })
+            );
+          }
+        }
+      ).sort({ price: sort });
+    } else {
+      Product.find({ category: category }, function (err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`,
+            })
+          );
+        }
+      }).sort({ price: sort });
+    }
+  });
+};
+
+let getProductByWebsiteService = (category, subCategory, websites) => {
+  return new Promise((resolve, reject) => {
+    if (category === "new") {
+      Product.find({ website: { $in: websites } }, function (err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`,
+            })
+          );
+        }
+      });
+    } else if (subCategory) {
+      Product.find(
+        {
+          $and: [
+            { category: { $eq: category } },
+            { subCategory: { $eq: subCategory } },
+            { website: { $in: websites } },
+          ],
+        },
+        function (err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(
+              (response = {
+                Product: result,
+                Status: `Success`,
+              })
+            );
+          }
+        }
+      );
+    } else {
+      Product.find({ $and: [{ category: category }, { website: { $in: websites } }] }, function (
+        err,
+        result
+      ) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`,
+            })
+          );
+        }
+      });
+    }
+  });
+};
+
+let getWebsitesService = (category, subCategory) => {
+  return new Promise((resolve, reject) => {
+    Product.aggregate(
+      [
+        { $match: { category: category, subCategory: subCategory } },
+        { $group: { _id: null, website: { $addToSet: "$website" } } },
+      ],
+      function (err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`,
+            })
+          );
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   addProductToDb,
   getProductByCategory,
@@ -183,5 +312,8 @@ module.exports = {
   saveNewKeyword,
   updateProductById,
   deleteProductService,
-  getProductsByKeyWordsService
+  getProductsByKeyWordsService,
+  getProductByPriceService,
+  getProductByWebsiteService,
+  getWebsitesService,
 };

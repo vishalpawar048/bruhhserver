@@ -19,6 +19,9 @@ route.post("/products/getProductsByKeyWords/", products.getProductsByKeyWords);
 //route.post("/products/getProducts", products.getProducts);
 route.post("/products/deleteProduct", products.deleteProduct);
 route.post("/products/addProductCSV", upload.single("CSV"), products.addProductCSV);
+route.post("/products/getProductByPrice", products.getProductByPrice);
+route.post("/products/getProductByWebsite", products.getProductByWebsite);
+route.post("/products/getWebsites", products.getWebsites);
 
 //Categories
 route.post("categories/addCategory", categories.addCategory);

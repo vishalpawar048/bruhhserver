@@ -1,23 +1,34 @@
-const {
-  addProductToDb,
-  getProductByCategory,
-  getProductByKeyWords,
-  saveNewKeyword,
-  updateProductById,
-  deleteProductService,
-  getProductsByKeyWordsService
-} = require("../services/productService");
+const service = require("../services/productService");
 const fs = require("fs");
 const csv = require("fast-csv");
 const { regex } = require("./keywords");
 var _ = require("lodash");
 
 let getProductsByCategory = async (req, res) => {
-  console.log("****************[ getProductsByCategory ]*****************");
+  console.log("****************[ getProductsByCategory ]*****************", req.body);
+  var selectedWebsites;
+  if (req.body.website) {
+    try {
+      selectedWebsites = JSON.parse(req.body.website);
+    } catch (error) {
+      selectedWebsites = req.body.website;
+    }
+  } else {
+    selectedWebsites = [];
+  }
 
-  let category = req.body.category.toLowerCase();
-  let subCategory = req.body.subCategory.toLowerCase();
-  let response = await getProductByCategory(category, subCategory);
+  let obj = {
+    category: req.body.category.toLowerCase(),
+    subCategory: req.body.subCategory.toLowerCase(),
+    page: req.body.page == 0 ? "0" : req.body.page - "1",
+    limit: 10,
+    website: selectedWebsites,
+    // website: req.body.subCategory.toLowerCase(),
+    sort: req.body.sort == "0" ? null : req.body.sort,
+  };
+  console.log(">>>>>>>>>>>>>>>>>obj", obj);
+  let response = await service.getProductByCategory(obj);
+  console.log(">>>>>>>>>>>>>>>>response", response.Product.length);
   if (response) {
     res.send(response);
   } else {
@@ -30,7 +41,8 @@ let getProductsByKeyWords = async (req, res) => {
 
   //let category = req.body.category.toLowerCase();
   let keyword = req.body.keyword.toLowerCase();
-  let response = await getProductsByKeyWordsService(keyword);
+  let response = await service.getProductsByKeyWordsService(keyword);
+
   if (response) {
     res.send(response);
   } else {
@@ -69,7 +81,7 @@ let addProduct = async (req, res) => {
 
   if (category) {
     try {
-      let response = await addProductToDb(body);
+      let response = await service.addProductToDb(body);
       res.send(response);
     } catch (error) {
       res.send(error);
@@ -77,7 +89,7 @@ let addProduct = async (req, res) => {
   } else {
     response = {
       Product: product,
-      Status: "Please add proper category"
+      Status: "Please add proper category",
     };
     res.send(response);
   }
@@ -92,7 +104,7 @@ let updateProduct = async (req, res) => {
 
   if (category) {
     try {
-      let response = await updateProductById(body, category, id);
+      let response = await service.updateProductById(body, category, id);
       res.send(response);
     } catch (error) {
       res.send(error);
@@ -100,7 +112,7 @@ let updateProduct = async (req, res) => {
   } else {
     response = {
       Product: product,
-      Status: "Please add proper category"
+      Status: "Please add proper category",
     };
     res.send(response);
   }
@@ -115,7 +127,7 @@ let deleteProduct = async (req, res) => {
 
   if (id) {
     try {
-      let response = await deleteProductService(id);
+      let response = await service.deleteProductService(id);
       res.send(response);
     } catch (error) {
       res.send(error);
@@ -123,11 +135,31 @@ let deleteProduct = async (req, res) => {
   } else {
     response = {
       Message: "Failed",
-      Status: "url is missing or empty"
+      Status: "url is missing or empty",
     };
     res.send(response);
   }
 };
+
+function shuffle(array) {
+  let counter = array.length;
+
+  // While there are elements in the array
+  while (counter > 0) {
+    // Pick a random index
+    let index = Math.floor(Math.random() * counter);
+
+    // Decrease counter by 1
+    counter--;
+
+    // And swap the last element with it
+    let temp = array[counter];
+    array[counter] = array[index];
+    array[index] = temp;
+  }
+
+  return array;
+}
 
 let addProductCSV = async (req, res) => {
   let productData = [];
@@ -135,7 +167,7 @@ let addProductCSV = async (req, res) => {
   if (req.file.path) {
     await csv
       .parseFile(req.file.path)
-      .on("data", function(data) {
+      .on("data", function (data) {
         let imgArray = [];
         imgArray.push(data[3], data[4], data[5], data[6]),
           productData.push({
@@ -148,19 +180,22 @@ let addProductCSV = async (req, res) => {
             keywords: data[9].toLowerCase(),
             rating: data[10],
             description: _.upperFirst(data[11]),
-            url: data[12]
+            url: data[12],
           });
       })
-      .on("end", async function() {
+      .on("end", async function () {
         productData.shift();
+        productData = shuffle(productData);
         // fs.rmdir("./tmp/csv", err => {
         //   if (err) throw err;
         //   console.log("******* [ file Deleted Successfully ] ******");
         // });
         let response;
         let resArray = [];
+        // console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
+        // res.send(productData);
         try {
-          productData.forEach(ele => {
+          productData.forEach((ele) => {
             response = addProductToDb(ele);
             resArray.push(response);
           });
@@ -172,11 +207,56 @@ let addProductCSV = async (req, res) => {
       });
   } else {
     try {
-      let response = await addProductToDb(req.body);
+      let response = await service.addProductToDb(req.body);
       res.send(response);
     } catch (error) {
       res.send(error);
     }
+  }
+};
+
+let getProductByPrice = async (req, res) => {
+  console.log("****************[ getProductsByKeyWords ]*****************");
+
+  //let category = req.body.category.toLowerCase();
+  let sort = req.body.sort;
+  let category = req.body.category.toLowerCase();
+  let subCategory = req.body.subCategory.toLowerCase();
+
+  let response = await service.getProductByPriceService(category, subCategory, sort);
+  if (response) {
+    res.send(response);
+  } else {
+    res.send("Error");
+  }
+};
+
+let getProductByWebsite = async (req, res) => {
+  console.log("****************[ getProductsByKeyWords ]*****************");
+  getProductByWebsite;
+  let websites = req.body.websites;
+  let category = req.body.category.toLowerCase();
+  let subCategory = req.body.subCategory.toLowerCase();
+
+  let response = await service.getProductByWebsiteService(category, subCategory, websites);
+  if (response) {
+    res.send(response);
+  } else {
+    res.send("Error");
+  }
+};
+
+let getWebsites = async (req, res) => {
+  console.log("****************[ getWebsites ]*****************");
+
+  let category = req.body.category.toLowerCase();
+  let subCategory = req.body.subCategory.toLowerCase();
+
+  let response = await service.getWebsitesService(category, subCategory);
+  if (response) {
+    res.send(response.Product[0]).website;
+  } else {
+    res.send("Error");
   }
 };
 
@@ -186,5 +266,8 @@ module.exports = {
   addProduct,
   updateProduct,
   deleteProduct,
-  addProductCSV
+  addProductCSV,
+  getProductByPrice,
+  getProductByWebsite,
+  getWebsites,
 };
