@@ -5,7 +5,7 @@ const { regex } = require("./keywords");
 var _ = require("lodash");
 
 let getProductsByCategory = async (req, res) => {
-  console.log("****************[ getProductsByCategory ]*****************", req.body);
+  console.log("****************[ getProductsByCategory ]******************", req.body);
   var selectedWebsites;
   if (req.body.website) {
     try {
@@ -26,9 +26,9 @@ let getProductsByCategory = async (req, res) => {
     // website: req.body.subCategory.toLowerCase(),
     sort: req.body.sort == "0" ? null : req.body.sort,
   };
-  console.log(">>>>>>>>>>>>>>>>>obj", obj);
+  // console.log(">>>>>>>>>>>>>>>>>obj", obj);
   let response = await service.getProductByCategory(obj);
-  console.log(">>>>>>>>>>>>>>>>response", response.Product.length);
+  // console.log(">>>>>>>>>>>>>>>>response", response.Product.length);
   if (response) {
     res.send(response);
   } else {
