@@ -19,7 +19,7 @@ let getProductsByCategory = async (req, res) => {
 
   let obj = {
     category: req.body.category.toLowerCase(),
-    subCategory: req.body.subCategory.toLowerCase(),
+    subCategory: req.body.subCategory.toLowerCase().replace(/ /g,''),
     page: req.body.page == 0 ? "0" : req.body.page - "1",
     limit: 10,
     website: selectedWebsites,
@@ -131,6 +131,7 @@ let deleteProduct = async (req, res) => {
       res.send(response);
     } catch (error) {
       res.send(error);
+      
     }
   } else {
     response = {
@@ -162,6 +163,7 @@ function shuffle(array) {
 }
 
 let addProductCSV = async (req, res) => {
+  console.log("****************** addProductCSV *********************",req.file.path)
   let productData = [];
 
   if (req.file.path) {
@@ -186,17 +188,14 @@ let addProductCSV = async (req, res) => {
       .on("end", async function () {
         productData.shift();
         productData = shuffle(productData);
-        // fs.rmdir("./tmp/csv", err => {
-        //   if (err) throw err;
-        //   console.log("******* [ file Deleted Successfully ] ******");
-        // });
+        
         let response;
         let resArray = [];
-        // console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
-        // res.send(productData);
+         console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
         try {
           productData.forEach((ele) => {
-            response = addProductToDb(ele);
+            
+            response = service.addProductToDb(ele);
             resArray.push(response);
           });
 
@@ -207,6 +206,7 @@ let addProductCSV = async (req, res) => {
       });
   } else {
     try {
+      console.log("abcdeeeeeeee")
       let response = await service.addProductToDb(req.body);
       res.send(response);
     } catch (error) {
@@ -260,6 +260,32 @@ let getWebsites = async (req, res) => {
   }
 };
 
+let getCategories = async (req, res) => {
+  console.log("****************[ getCategories ]*****************",req.body);
+
+
+  let response = await service.getCategoriesService(subCategory, newSubCategory);
+  if (response) {
+    res.send(response);
+  } else {
+    res.send("Error");
+  }
+};
+
+let updateSubCatagory = async (req, res) => {
+  console.log("****************[ updateCatagoryString ]*****************", req.body);
+
+  let subCategory = req.body.subCategory.toLowerCase();
+  let newSubCategory = req.body.newSubCategory.toLowerCase();
+
+  let response = await service.updateSubCatagoryService(subCategory, newSubCategory );
+  if (response) {
+    res.send(response);
+  } else {
+    res.send("Error");
+  }
+};
+
 module.exports = {
   getProductsByCategory,
   getProductsByKeyWords,
@@ -270,4 +296,6 @@ module.exports = {
   getProductByPrice,
   getProductByWebsite,
   getWebsites,
+  getCategories,
+  updateSubCatagory
 };

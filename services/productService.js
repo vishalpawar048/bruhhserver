@@ -22,6 +22,7 @@ let saveNewKeyword = (keyword) => {
 
 let addProductToDb = (body) => {
   var product = new Product(body);
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
   return new Promise((resolve, reject) => {
     product.save(function (err, result) {
       if (err) {
@@ -40,7 +41,11 @@ let addProductToDb = (body) => {
 
 let getProductByCategory = (obj) => {
   let query;
-  let sortQuery = obj.sort ? { price: obj.sort } : { _id: -1 };
+  // let sortQuery = obj.sort ? { price: obj.sort } : { _id: -1 };
+  let sortQuery = { _id: -1 };
+
+  
+  
 
   if (!obj.website) {
     obj.website = [];
@@ -48,7 +53,10 @@ let getProductByCategory = (obj) => {
 
   if (obj.category === "new" && obj.website.length > 0) {
     query = { website: { $in: obj.website } };
-  } else if (obj.category === "new" && obj.website.length == 0) {
+  }else if (obj.category === "gifts") {
+    query = { subCategory: { $in: ["watch","headphone","coffee mug","accessories"] } };
+  }
+   else if (obj.category === "new" && obj.website.length == 0) {
     query = {};
   } else if (obj.subCategory && obj.website.length > 0) {
     query = {
@@ -305,6 +313,40 @@ let getWebsitesService = (category, subCategory) => {
   });
 };
 
+let getCategoriesService = (id) => {
+  return new Promise((resolve, reject) => {
+ 
+    Product.aggregate([
+      {"$group": { "_id": { category: "$category", subCategory: "$subCategory" } } }
+  ], function (err, result) {
+      if (err) {
+        reject(err);
+        // console.error("error in saveNewKeyword");
+      } else {
+        resolve(result);
+        // console.log("New Keyword added successfully");
+      }
+    });
+  });
+};
+
+let updateSubCatagoryService = (oldSubCategory, newSubCategory) =>{
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>one piece,",oldSubCategory,newSubCategory)
+  return new Promise((resolve, reject) => {
+    Product.updateMany({subCategory: oldSubCategory}, {$set: {subCategory: newSubCategory}}, function (err, result) {
+      if (err) {
+        reject(err);
+        // console.error("error in saveNewKeyword");
+      } else {
+        resolve(result);
+        // console.log("New Keyword added successfully");
+      }
+  
+  });
+  })
+
+}
+
 module.exports = {
   addProductToDb,
   getProductByCategory,
@@ -316,4 +358,7 @@ module.exports = {
   getProductByPriceService,
   getProductByWebsiteService,
   getWebsitesService,
+  getCategoriesService,
+  updateSubCatagoryService
+  
 };
