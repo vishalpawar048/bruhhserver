@@ -17,10 +17,12 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use("/", router);
 
-// httpsServer.listen(port, () => console.log(`Example app listening on port ${port}!`));
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+//Uncommente this line for production
+httpsServer.listen(port, () => console.log(`Example app listening on port ${port}!`));
+//Uncomment this for local
+// app.listen(port, () => {
+//   console.log(`Example app listening at http://localhost:${port}`)
+// })
 
 
 module.exports = {
