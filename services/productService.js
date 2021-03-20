@@ -41,11 +41,8 @@ let addProductToDb = (body) => {
 
 let getProductByCategory = (obj) => {
   let query;
-  // let sortQuery = obj.sort ? { price: obj.sort } : { _id: -1 };
-  let sortQuery = { _id: -1 };
-
-  
-  
+  let sortQuery = obj.sort ? { price: obj.sort } : { _id: -1 };
+  // let sortQuery = { _id: -1 };
 
   if (!obj.website) {
     obj.website = [];
@@ -63,6 +60,13 @@ let getProductByCategory = (obj) => {
       $and: [
         { category: { $eq: obj.category } },
         { subCategory: { $eq: obj.subCategory } },
+        { website: { $in: obj.website } },
+      ],
+    };
+  } else if (!obj.subCategory && obj.website.length > 0) {
+    query = {
+      $and: [
+        { category: { $eq: obj.category } },
         { website: { $in: obj.website } },
       ],
     };
@@ -292,7 +296,8 @@ let getProductByWebsiteService = (category, subCategory, websites) => {
 
 let getWebsitesService = (category, subCategory) => {
   return new Promise((resolve, reject) => {
-    Product.aggregate(
+    if(subCategory){
+          Product.aggregate(
       [
         { $match: { category: category, subCategory: subCategory } },
         { $group: { _id: null, website: { $addToSet: "$website" } } },
@@ -310,6 +315,27 @@ let getWebsitesService = (category, subCategory) => {
         }
       }
     );
+    }else{
+      Product.aggregate(
+        [
+          { $match: { category: category } },
+          { $group: { _id: null, website: { $addToSet: "$website" } } },
+        ],
+        function (err, result) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(
+              (response = {
+                Product: result,
+                Status: `Success`,
+              })
+            );
+          }
+        }
+      );
+    }
+   
   });
 };
 

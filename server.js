@@ -6,8 +6,6 @@ const router = require("./routes");
 var cors = require('cors')
 require("./model/db");
 const bodyParser = require("body-parser");
-
-var http = require('http');
 var https = require('https');
 var privateKey  = fs.readFileSync('ssl/bruhh.in.key', 'utf8');
 var certificate = fs.readFileSync('ssl/bruhh.in.crt', 'utf8');
@@ -19,7 +17,11 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use("/", router);
 
-httpsServer.listen(port, () => console.log(`Example app listening on port ${port}!`));
+// httpsServer.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})
+
 
 module.exports = {
   httpsServer

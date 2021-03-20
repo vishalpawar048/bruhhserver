@@ -28,7 +28,7 @@ let getProductsByCategory = async (req, res) => {
   };
   // console.log(">>>>>>>>>>>>>>>>>obj", obj);
   let response = await service.getProductByCategory(obj);
-  // console.log(">>>>>>>>>>>>>>>>response", response.Product.length);
+  console.log(">>>>>>>>>>>>>>>>response", response);
   if (response) {
     res.send(response);
   } else {
@@ -250,7 +250,7 @@ let getWebsites = async (req, res) => {
   console.log("****************[ getWebsites ]*****************");
 
   let category = req.body.category.toLowerCase();
-  let subCategory = req.body.subCategory.toLowerCase();
+  let subCategory = req.body.subCategory ? req.body.subCategory.toLowerCase() : null;
 
   let response = await service.getWebsitesService(category, subCategory);
   if (response) {
