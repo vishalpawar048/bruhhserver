@@ -28,7 +28,6 @@ let getProductsByCategory = async (req, res) => {
   };
   // console.log(">>>>>>>>>>>>>>>>>obj", obj);
   let response = await service.getProductByCategory(obj);
-  console.log(">>>>>>>>>>>>>>>>response", response);
   if (response) {
     res.send(response);
   } else {
@@ -233,12 +232,24 @@ let getProductByPrice = async (req, res) => {
 
 let getProductByWebsite = async (req, res) => {
   console.log("****************[ getProductsByKeyWords ]*****************");
-  getProductByWebsite;
   let websites = req.body.websites;
   let category = req.body.category.toLowerCase();
   let subCategory = req.body.subCategory.toLowerCase();
 
   let response = await service.getProductByWebsiteService(category, subCategory, websites);
+  if (response) {
+    res.send(response);
+  } else {
+    res.send("Error");
+  }
+};
+
+let getProductById = async (req, res) => {
+  console.log("****************[ getProductById ]*****************");
+ 
+  let id = req.body.id;
+
+  let response = await service.getProductByIdService(id);
   if (response) {
     res.send(response);
   } else {
@@ -297,5 +308,6 @@ module.exports = {
   getProductByWebsite,
   getWebsites,
   getCategories,
-  updateSubCatagory
+  updateSubCatagory,
+  getProductById
 };

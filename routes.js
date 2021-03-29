@@ -23,6 +23,9 @@ route.post("/products/addProductCSV", upload.single("CSV"), products.addProductC
 route.post("/products/getProductByPrice", products.getProductByPrice);
 route.post("/products/getProductByWebsite", products.getProductByWebsite);
 route.post("/products/getWebsites", products.getWebsites);
+route.post("/products/getProductById", products.getProductById);
+
+
 
 //Categories
 route.post("categories/addCategory", categories.addCategory);

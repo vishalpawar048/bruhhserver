@@ -19,6 +19,7 @@ app.use("/", router);
 
 //Uncommente this line for production
 httpsServer.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
 //Uncomment this for local
 // app.listen(port, () => {
 //   console.log(`Example app listening at http://localhost:${port}`)

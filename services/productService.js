@@ -357,9 +357,24 @@ let getCategoriesService = (id) => {
 };
 
 let updateSubCatagoryService = (oldSubCategory, newSubCategory) =>{
-  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>one piece,",oldSubCategory,newSubCategory)
   return new Promise((resolve, reject) => {
     Product.updateMany({subCategory: oldSubCategory}, {$set: {subCategory: newSubCategory}}, function (err, result) {
+      if (err) {
+        reject(err);
+        // console.error("error in saveNewKeyword");
+      } else {
+        resolve(result);
+        // console.log("New Keyword added successfully");
+      }
+  
+  });
+  })
+
+}
+
+let getProductByIdService = (id) =>{
+  return new Promise((resolve, reject) => {
+    Product.findById(id, function (err, result) {
       if (err) {
         reject(err);
         // console.error("error in saveNewKeyword");
@@ -385,6 +400,7 @@ module.exports = {
   getProductByWebsiteService,
   getWebsitesService,
   getCategoriesService,
-  updateSubCatagoryService
+  updateSubCatagoryService,
+  getProductByIdService
   
 };
