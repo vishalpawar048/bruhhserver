@@ -48,8 +48,10 @@ let getWishlist = async (req, res) => {
   }
 
   if (wishlist) {
+    
     res.send({ wishlist: wishlist, Status: "success" });
   } else {
+    console.log(">>>>>>>>>>>>>>>>>>>>res",res)
     res.send({ Status: "error" });
   }
 };
