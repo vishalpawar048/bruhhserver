@@ -182,6 +182,7 @@ let addProductCSV = async (req, res) => {
             rating: data[10],
             description: _.upperFirst(data[11]),
             url: data[12],
+            createdAt: new Date()
           });
       })
       .on("end", async function () {
@@ -296,6 +297,21 @@ let updateSubCatagory = async (req, res) => {
     res.send("Error");
   }
 };
+
+// let deletedProductsbyDate = async (req, res) => {
+//   console.log("****************[ updateCatagoryString ]*****************", req.body);
+
+//   let date = req.body.date;
+//   let category = req.body.category.toLowerCase();
+//   let subCategory = req.body.subCategory.toLowerCase();
+
+//   let response = await service.deletedProductsbyDateService(date, category, subCategory);
+//   if (response) {
+//     res.send(response);
+//   } else {
+//     res.send("Error");
+//   }
+// };
 
 module.exports = {
   getProductsByCategory,
