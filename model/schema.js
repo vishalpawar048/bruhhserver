@@ -10,7 +10,8 @@ var productSchema = new mongoose.Schema({
   keywords: String,
   rating: String,
   description: String,
-  url: { type: String, unique: true }
+  url: { type: String, unique: true },
+  createdAt: Date,
 });
 
 productSchema.index(
