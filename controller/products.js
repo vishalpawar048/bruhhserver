@@ -170,7 +170,12 @@ let addProductCSV = async (req, res) => {
       .parseFile(req.file.path)
       .on("data", function (data) {
         let imgArray = [];
-        imgArray.push(data[3], data[4], data[5], data[6]),
+      
+          imgArray.push(data[3], data[4], data[5], data[6])
+
+      
+        // imgArray.push(data[3]),
+
           productData.push({
             name: _.upperFirst(data[0]),
             price: data[1],
@@ -186,20 +191,24 @@ let addProductCSV = async (req, res) => {
           });
       })
       .on("end", async function () {
+       if(productData.length > 1){
         productData.shift();
+
         productData = shuffle(productData);
+       }
         
         let response;
         let resArray = [];
-        //  console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
+         console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
         try {
           productData.forEach((ele) => {
             
             response = service.addProductToDb(ele);
             resArray.push(response);
-          });
 
-          res.send(resArray.length);
+          })
+
+         
         } catch (error) {
           res.send(error);
         } // remove temp file
