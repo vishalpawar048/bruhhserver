@@ -51,7 +51,9 @@ let getProductByCategory = (obj) => {
   if (obj.category === "new" && obj.website.length > 0) {
     query = { website: { $in: obj.website } };
   }else if (obj.category === "gifts") {
-    query = { subCategory: { $in: ["watch","headphone","coffee mug","accessories"] } };
+    // query = { subCategory: { $in: ["watch","headphone","coffee mug","accessories"] } };
+    query = { subCategory: { $in: ["gifts","watch","headphone","coffee mug","accessories"] } };
+
   }
    else if (obj.category === "new" && obj.website.length == 0) {
     query = {};
@@ -386,6 +388,21 @@ let getProductByIdService = (id) =>{
   });
   })
 
+}
+
+let deletedProductsbyDateService =(date, category, subCategory) =>{
+  return new Promise((resolve, reject) => {
+    Product.findById(id, function (err, result) {
+      if (err) {
+        reject(err);
+        // console.error("error in saveNewKeyword");
+      } else {
+        resolve(result);
+        // console.log("New Keyword added successfully");
+      }
+  
+  });
+  })
 }
 
 module.exports = {

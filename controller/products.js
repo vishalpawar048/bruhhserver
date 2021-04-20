@@ -191,7 +191,7 @@ let addProductCSV = async (req, res) => {
         
         let response;
         let resArray = [];
-         console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
+        //  console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
         try {
           productData.forEach((ele) => {
             
@@ -199,14 +199,13 @@ let addProductCSV = async (req, res) => {
             resArray.push(response);
           });
 
-          res.send(resArray);
+          res.send(resArray.length);
         } catch (error) {
           res.send(error);
         } // remove temp file
       });
   } else {
     try {
-      console.log("abcdeeeeeeee")
       let response = await service.addProductToDb(req.body);
       res.send(response);
     } catch (error) {
