@@ -286,6 +286,9 @@ let getWebsiteDetails = async (req, res) => {
   let website = req.body.website.toLowerCase();
   let response = await service.getWebsiteDetailsService(website);
   if (response) {
+    let rating = (+response[0]._doc.deliveryRating + +response[0]._doc.returnPolicy + +response[0]._doc.productsQuality)/3;
+    let overallRating = Math.round(rating);
+    response[0]._doc.overallRating =  overallRating.toString();
     res.send(response);
   } else {
     res.send("Error");
