@@ -1,4 +1,4 @@
-const { Product, MenProduct, WomenProduct, Gadget, NewKeyword } = require("../model/schema");
+const { Product, MenProduct, WomenProduct, Gadget, NewKeyword, Website } = require("../model/schema");
 
 let saveNewKeyword = (keyword) => {
   let newKeywords = new NewKeyword({ query: keyword });
@@ -22,7 +22,6 @@ let saveNewKeyword = (keyword) => {
 
 let addProductToDb = (body) => {
   var product = new Product(body);
-  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
   return new Promise((resolve, reject) => {
     product.save(function (err, result) {
       if (err) {
@@ -390,6 +389,23 @@ let getProductByIdService = (id) =>{
 
 }
 
+let getWebsiteDetailsService = (website) =>{
+  return new Promise((resolve, reject) => {
+    Website.find({ name: website}, function (err, result) {
+      if (err) {
+        reject(err);
+        // console.error("error in saveNewKeyword");
+      } else {
+        console.log(">>>>>>>>>>>>>>rating",result)
+        resolve(result);
+        // console.log("New Keyword added successfully");
+      }
+  
+  });
+  })
+
+}
+
 let deletedProductsbyDateService =(date, category, subCategory) =>{
   return new Promise((resolve, reject) => {
     Product.findById(id, function (err, result) {
@@ -418,6 +434,7 @@ module.exports = {
   getWebsitesService,
   getCategoriesService,
   updateSubCatagoryService,
-  getProductByIdService
+  getProductByIdService,
+  getWebsiteDetailsService
   
 };

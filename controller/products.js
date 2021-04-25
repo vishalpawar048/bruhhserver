@@ -280,11 +280,11 @@ let getWebsites = async (req, res) => {
   }
 };
 
-let getCategories = async (req, res) => {
+
+let getWebsiteDetails = async (req, res) => {
   console.log("****************[ getCategories ]*****************",req.body);
-
-
-  let response = await service.getCategoriesService(subCategory, newSubCategory);
+  let website = req.body.website.toLowerCase();
+  let response = await service.getWebsiteDetailsService(website);
   if (response) {
     res.send(response);
   } else {
@@ -331,7 +331,7 @@ module.exports = {
   getProductByPrice,
   getProductByWebsite,
   getWebsites,
-  getCategories,
   updateSubCatagory,
-  getProductById
+  getProductById,
+  getWebsiteDetails
 };

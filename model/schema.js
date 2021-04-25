@@ -70,7 +70,18 @@ var wishlistSchema = new mongoose.Schema({
   gender: String
 });
 
+var websiteSchema = new mongoose.Schema({
+  name:String,
+  deliveryRating: String,
+  returnPolicy: String,
+  productsQuality: String,
+  logo: String,
+  description: String,
+  createdAt: Date,
+});
+
 var Product = mongoose.model("Product", productSchema);
+var Website = mongoose.model("Website", websiteSchema);
 var MenProduct = mongoose.model("Men", productSchema);
 var WomenProduct = mongoose.model("Women", productSchema);
 var Gadget = mongoose.model("Gadget", productSchema);
@@ -91,5 +102,6 @@ module.exports = {
   Banner,
   Category,
   User,
-  Wishlist
+  Wishlist,
+  Website
 };

@@ -15,8 +15,8 @@ route.post("/user/saveFcmToken", user.saveFcmToken);
 route.post("/products/addProduct", products.addProduct);
 route.post("/products/updateProduct", products.updateProduct);
 route.post("/products/getProductsByCategory/", products.getProductsByCategory);
+route.post("/products/getWebsiteDetails/", products.getWebsiteDetails);
 route.post("/products/getProductsByKeyWords/", products.getProductsByKeyWords);
-route.post("/products/getCategories", products.getCategories);
 route.post("/products/updateSubCatagory/", products.updateSubCatagory);
 route.post("/products/deleteProduct", products.deleteProduct);
 route.post("/products/addProductCSV", upload.single("CSV"), products.addProductCSV);
@@ -30,7 +30,7 @@ route.post("/products/getProductById", products.getProductById);
 //Categories
 route.post("categories/addCategory", categories.addCategory);
 route.post("categories/updateCategory", categories.updateCategory);
-route.get("categories/getCategories", categories.getCategories);
+// route.get("categories/getCategories", categories.getCategories);
 route.get("categories/deleteCategory", categories.deleteCategory);
 
 //Banner
