@@ -295,48 +295,17 @@ let getProductByWebsiteService = (category, subCategory, websites) => {
   });
 };
 
-let getWebsitesService = (category, subCategory) => {
+let getWebsitesService = () => {
   return new Promise((resolve, reject) => {
-    if(subCategory){
-          Product.aggregate(
-      [
-        { $match: { category: category, subCategory: subCategory } },
-        { $group: { _id: null, website: { $addToSet: "$website" } } },
-      ],
-      function (err, result) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(
-            (response = {
-              Product: result,
-              Status: `Success`,
-            })
-          );
-        }
+    Product.distinct("website", function (err, result) {
+      if (err) {
+        reject(err);
+        // console.error("error in saveNewKeyword");
+      } else {
+        resolve(result);
+        // console.log("New Keyword added successfully");
       }
-    );
-    }else{
-      Product.aggregate(
-        [
-          { $match: { category: category } },
-          { $group: { _id: null, website: { $addToSet: "$website" } } },
-        ],
-        function (err, result) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(
-              (response = {
-                Product: result,
-                Status: `Success`,
-              })
-            );
-          }
-        }
-      );
-    }
-   
+    });
   });
 };
 

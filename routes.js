@@ -22,7 +22,7 @@ route.post("/products/deleteProduct", products.deleteProduct);
 route.post("/products/addProductCSV", upload.single("CSV"), products.addProductCSV);
 route.post("/products/getProductByPrice", products.getProductByPrice);
 route.post("/products/getProductByWebsite", products.getProductByWebsite);
-route.post("/products/getWebsites", products.getWebsites);
+route.get("/products/getWebsites", products.getWebsites);
 route.post("/products/getProductById", products.getProductById);
 
 

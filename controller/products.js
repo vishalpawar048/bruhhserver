@@ -269,12 +269,9 @@ let getProductById = async (req, res) => {
 let getWebsites = async (req, res) => {
   console.log("****************[ getWebsites ]*****************");
 
-  let category = req.body.category.toLowerCase();
-  let subCategory = req.body.subCategory ? req.body.subCategory.toLowerCase() : null;
-
-  let response = await service.getWebsitesService(category, subCategory);
+  let response = await service.getWebsitesService();
   if (response) {
-    res.send(response.Product[0]).website;
+    res.send(response);
   } else {
     res.send("Error");
   }
