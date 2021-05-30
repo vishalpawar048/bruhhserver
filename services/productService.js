@@ -313,7 +313,7 @@ let getProductByWebsiteService = (category, subCategory, websites) => {
   });
 };
 
-let getWebsitesService = () => {
+let getAllWebsitesService = () => {
   return new Promise((resolve, reject) => {
     Product.distinct("website", function (err, result) {
       if (err) {
@@ -324,6 +324,29 @@ let getWebsitesService = () => {
         // console.log("New Keyword added successfully");
       }
     });
+  });
+};
+
+let getWebsitesService = (category, subCategory) => {
+  return new Promise((resolve, reject) => {
+    Product.aggregate(
+      [
+        { $match: { category: category, subCategory: subCategory } },
+        { $group: { _id: null, website: { $addToSet: "$website" } } },
+      ],
+      function (err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              Product: result,
+              Status: `Success`,
+            })
+          );
+        }
+      }
+    );
   });
 };
 
@@ -427,4 +450,5 @@ module.exports = {
   updateSubCatagoryService,
   getProductByIdService,
   getWebsiteDetailsService,
+  getAllWebsitesService,
 };

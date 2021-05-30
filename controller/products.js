@@ -294,12 +294,26 @@ let getProductById = async (req, res) => {
   }
 };
 
-let getWebsites = async (req, res) => {
-  console.log("****************[ getWebsites ]*****************");
+let getAllWebsites = async (req, res) => {
+  console.log("****************[ getAllWebsites ]*****************");
 
   let response = await service.getWebsitesService();
   if (response) {
     res.send(response);
+  } else {
+    res.send("Error");
+  }
+};
+
+let getWebsites = async (req, res) => {
+  console.log("****************[ getWebsites ]*****************");
+
+  let category = req.body.category.toLowerCase();
+  let subCategory = req.body.subCategory.toLowerCase();
+
+  let response = await service.getWebsitesService(category, subCategory);
+  if (response) {
+    res.send(response.Product[0]).website;
   } else {
     res.send("Error");
   }
@@ -372,4 +386,5 @@ module.exports = {
   updateSubCatagory,
   getProductById,
   getWebsiteDetails,
+  getAllWebsites,
 };

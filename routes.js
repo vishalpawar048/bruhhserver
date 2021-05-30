@@ -19,13 +19,16 @@ route.post("/products/getWebsiteDetails/", products.getWebsiteDetails);
 route.post("/products/getProductsByKeyWords/", products.getProductsByKeyWords);
 route.post("/products/updateSubCatagory/", products.updateSubCatagory);
 route.post("/products/deleteProduct", products.deleteProduct);
-route.post("/products/addProductCSV", upload.single("CSV"), products.addProductCSV);
+route.post(
+  "/products/addProductCSV",
+  upload.single("CSV"),
+  products.addProductCSV
+);
 route.post("/products/getProductByPrice", products.getProductByPrice);
 route.post("/products/getProductByWebsite", products.getProductByWebsite);
-route.get("/products/getWebsites", products.getWebsites);
+route.post("/products/getWebsites", products.getWebsites);
 route.post("/products/getProductById", products.getProductById);
-
-
+route.get("/products/getAllWebsites", products.getAllWebsites);
 
 //Categories
 route.post("categories/addCategory", categories.addCategory);
