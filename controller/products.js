@@ -309,7 +309,7 @@ let getWebsiteDetails = async (req, res) => {
   console.log("****************[ getCategories ]*****************", req.body);
   let website = req.body.website.toLowerCase();
   let response = await service.getWebsiteDetailsService(website);
-  console.log(">>>>>>>>response", response);
+  // console.log(">>>>>>>>response", response);
   if (response.length > 0) {
     let rating =
       (+response[0]._doc.deliveryRating +
