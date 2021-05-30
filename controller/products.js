@@ -5,7 +5,10 @@ const { regex } = require("./keywords");
 var _ = require("lodash");
 
 let getProductsByCategory = async (req, res) => {
-  console.log("****************[ getProductsByCategory ]******************", req.body);
+  console.log(
+    "****************[ getProductsByCategory ]******************",
+    req.body
+  );
   var selectedWebsites;
   if (req.body.website) {
     try {
@@ -19,7 +22,7 @@ let getProductsByCategory = async (req, res) => {
 
   let obj = {
     category: req.body.category.toLowerCase(),
-    subCategory: req.body.subCategory.toLowerCase().replace(/ /g,''),
+    subCategory: req.body.subCategory.toLowerCase().replace(/ /g, ""),
     page: req.body.page == 0 ? "0" : req.body.page - "1",
     limit: 10,
     website: selectedWebsites,
@@ -130,7 +133,6 @@ let deleteProduct = async (req, res) => {
       res.send(response);
     } catch (error) {
       res.send(error);
-      
     }
   } else {
     response = {
@@ -162,7 +164,10 @@ function shuffle(array) {
 }
 
 let addProductCSV = async (req, res) => {
-  console.log("****************** addProductCSV *********************",req.file.path)
+  console.log(
+    "****************** addProductCSV *********************",
+    req.file.path
+  );
   let productData = [];
 
   if (req.file.path) {
@@ -170,48 +175,63 @@ let addProductCSV = async (req, res) => {
       .parseFile(req.file.path)
       .on("data", function (data) {
         let imgArray = [];
-      
-          imgArray.push(data[3], data[4], data[5], data[6])
 
-      
+        imgArray.push(data[3], data[4], data[5], data[6]);
+
         // imgArray.push(data[3]),
 
-          productData.push({
-            name: _.upperFirst(data[0]),
-            price: data[1],
-            website: _.upperFirst(data[2]),
-            imgUrls: imgArray,
-            category: data[7].toLowerCase(),
-            subCategory: data[8].toLowerCase(),
-            keywords: data[9].toLowerCase(),
-            rating: data[10],
-            description: _.upperFirst(data[11]),
-            url: data[12],
-            createdAt: new Date()
-          });
+        productData.push({
+          name: _.upperFirst(data[0]),
+          price: data[1],
+          website: _.upperFirst(data[2]),
+          imgUrls: imgArray,
+          category: data[7].toLowerCase(),
+          subCategory: data[8].toLowerCase(),
+          keywords: data[9].toLowerCase(),
+          rating: data[10],
+          description: _.upperFirst(data[11]),
+          url: data[12],
+          createdAt: new Date(),
+        });
       })
       .on("end", async function () {
-       if(productData.length > 1){
-        productData.shift();
+        if (productData.length > 1) {
+          productData.shift();
 
-        productData = shuffle(productData);
-       }
-        
+          productData = shuffle(productData);
+        }
+
         let response;
         let resArray = [];
-         console.log(">>>>>>>>>>>>>>>>>>>>>", productData);
-        try {
-          productData.forEach((ele) => {
-            
-            response = service.addProductToDb(ele);
-            resArray.push(response);
 
+        await Promise.all(
+          productData.map(async (ele) => {
+            try {
+              response = await service.addProductToDb(ele);
+              resArray.push(response);
+            } catch (error) {
+              if (error.keyValue) {
+                resArray.push("Duplicate Product Error:" + error.keyValue.url);
+              }
+            }
           })
+        );
 
-         
-        } catch (error) {
-          res.send(error);
-        } // remove temp file
+        // productData.forEach(async (ele) => {
+
+        //     response =  service.addProductToDb(ele).then(res=>{
+        //       resArray.push(res);
+        //     }).catch(e=>{
+        //       console.log(">>>>>>>>>>>>>>>>>>>>>eeeeeeeee2", error);
+        //       if(error.keyValue){
+        //         resArray.push("Duplicate Product Error:" + error.keyValue);
+        //       }
+        //     });
+
+        // });
+        res.send(resArray);
+
+        // remove temp file
       });
   } else {
     try {
@@ -231,7 +251,11 @@ let getProductByPrice = async (req, res) => {
   let category = req.body.category.toLowerCase();
   let subCategory = req.body.subCategory.toLowerCase();
 
-  let response = await service.getProductByPriceService(category, subCategory, sort);
+  let response = await service.getProductByPriceService(
+    category,
+    subCategory,
+    sort
+  );
   if (response) {
     res.send(response);
   } else {
@@ -245,7 +269,11 @@ let getProductByWebsite = async (req, res) => {
   let category = req.body.category.toLowerCase();
   let subCategory = req.body.subCategory.toLowerCase();
 
-  let response = await service.getProductByWebsiteService(category, subCategory, websites);
+  let response = await service.getProductByWebsiteService(
+    category,
+    subCategory,
+    websites
+  );
   if (response) {
     res.send(response);
   } else {
@@ -255,7 +283,7 @@ let getProductByWebsite = async (req, res) => {
 
 let getProductById = async (req, res) => {
   console.log("****************[ getProductById ]*****************");
- 
+
   let id = req.body.id;
 
   let response = await service.getProductByIdService(id);
@@ -277,28 +305,38 @@ let getWebsites = async (req, res) => {
   }
 };
 
-
 let getWebsiteDetails = async (req, res) => {
-  console.log("****************[ getCategories ]*****************",req.body);
+  console.log("****************[ getCategories ]*****************", req.body);
   let website = req.body.website.toLowerCase();
   let response = await service.getWebsiteDetailsService(website);
-  if (response) {
-    let rating = (+response[0]._doc.deliveryRating + +response[0]._doc.returnPolicy + +response[0]._doc.productsQuality)/3;
+  console.log(">>>>>>>>response", response);
+  if (response.length > 0) {
+    let rating =
+      (+response[0]._doc.deliveryRating +
+        +response[0]._doc.returnPolicy +
+        +response[0]._doc.productsQuality) /
+      3;
     let overallRating = Math.round(rating);
-    response[0]._doc.overallRating =  overallRating.toString();
+    response[0]._doc.overallRating = overallRating.toString();
     res.send(response);
   } else {
-    res.send("Error");
+    res.send([]);
   }
 };
 
 let updateSubCatagory = async (req, res) => {
-  console.log("****************[ updateCatagoryString ]*****************", req.body);
+  console.log(
+    "****************[ updateCatagoryString ]*****************",
+    req.body
+  );
 
   let subCategory = req.body.subCategory.toLowerCase();
   let newSubCategory = req.body.newSubCategory.toLowerCase();
 
-  let response = await service.updateSubCatagoryService(subCategory, newSubCategory );
+  let response = await service.updateSubCatagoryService(
+    subCategory,
+    newSubCategory
+  );
   if (response) {
     res.send(response);
   } else {
@@ -333,5 +371,5 @@ module.exports = {
   getWebsites,
   updateSubCatagory,
   getProductById,
-  getWebsiteDetails
+  getWebsiteDetails,
 };
