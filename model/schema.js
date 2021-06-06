@@ -62,7 +62,7 @@ var userSchema = new mongoose.Schema({
   gender: String,
   fcmToken: String,
   date: String
-});
+},{ timestamps: { createdAt: 'created_at' }});
 
 var wishlistSchema = new mongoose.Schema({
   emailId: String,

@@ -48,6 +48,11 @@ route.post("/wishlist/removefromWishlist", wishlist.removefromWishlist);
 route.get("/wishlist/getWishlist/:emailId", wishlist.getWishlist);
 // route.get("wishlist/deleteCategory", wishlist.deleteCategory);
 
+//Save User
+route.post("/user/saveUserDetail", user.saveUserDetail);
+
+
+
 //Banner: NewArrivals
 // route.post("/banners/addSlidingBanner/", banners.addSlidingBanner);
 // route.post("/banners/UpdateSlidingBanner/", banners.UpdateSlidingBanner);

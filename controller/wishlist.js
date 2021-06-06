@@ -8,31 +8,24 @@ const { checkAndUpdateUserDetails } = require("../services/userDetailsService");
 
 let addToWishlist = async (req, res) => {
   console.log("****************[ addToWishlist ]*****************");
-  let fcmToken = req.body.fcmToken;
+  // let fcmToken = req.body.fcmToken;
   let emailId = req.body.emailId;
   let productId = req.body.productId;
 
   let response;
 
-  if (emailId) {
     try {
-      let userDetails = await checkAndUpdateUserDetails(fcmToken, emailId);
-      if (userDetails.user) {
+      // let userDetails = await checkAndUpdateUserDetails(fcmToken, emailId);
+      if (emailId && productId) {
         let response = await addWishListToDb(emailId, productId);
         res.send(response);
       } else {
-        res.send("error");
+        res.send("No Email or Product Id");
       }
     } catch (error) {
       res.send(error);
     }
-  } else {
-    response = {
-      Product: product,
-      Status: "Please add proper category"
-    };
-    res.send(response);
-  }
+  
 };
 
 let getWishlist = async (req, res) => {

@@ -44,7 +44,30 @@ let saveFcmTokenService = (fcmToken, date) => {
   });
 };
 
+let saveUserDetails = (emailId, name) => {
+  return new Promise((resolve, reject) => {
+    User.findOneAndUpdate(
+      { emailId: emailId },
+      { $set: { emailId: emailId , name: name} },
+      { upsert: true, returnOriginal: true },
+      function(err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            (response = {
+              user: result,
+              Status: `Email added successfully `
+            })
+          );
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   checkAndUpdateUserDetails,
-  saveFcmTokenService
+  saveFcmTokenService,
+  saveUserDetails
 };
