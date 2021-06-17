@@ -80,6 +80,29 @@ var websiteSchema = new mongoose.Schema({
   createdAt: Date,
 });
 
+var websiteCommentsSchema = new mongoose.Schema({
+  website: String,
+  userId: String,
+  emailId:String,
+  comment:String,
+  websiteRating: String,
+  productsQualityRating: String,
+  deliveryRating: String,
+  returnPolicyRating:String,
+  createdAt: Date,
+});
+
+var productCommentsSchema = new mongoose.Schema({
+  productId:String,
+  name: String,
+  website: String,
+  userId: String,
+  emailId:String,
+  comment:String,
+  productRating: String,
+  createdAt: Date,
+});
+
 var Product = mongoose.model("Product", productSchema);
 var Website = mongoose.model("Website", websiteSchema);
 var MenProduct = mongoose.model("Men", productSchema);
@@ -93,6 +116,11 @@ var Banner = mongoose.model("Banner", BannerSchema);
 var User = mongoose.model("User", userSchema);
 var Wishlist = mongoose.model("Wishlist", wishlistSchema);
 
+var WebsiteComments = mongoose.model("WebsiteComments", websiteCommentsSchema);
+var ProductComments = mongoose.model("ProductComments", productCommentsSchema);
+
+
+
 module.exports = {
   Product,
   MenProduct,
@@ -103,5 +131,7 @@ module.exports = {
   Category,
   User,
   Wishlist,
-  Website
+  Website,
+  WebsiteComments,
+  ProductComments
 };

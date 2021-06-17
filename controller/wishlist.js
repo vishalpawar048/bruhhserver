@@ -52,7 +52,7 @@ let getWishlist = async (req, res) => {
 let removefromWishlist = async (req, res) => {
   console.log("****************[ removefromWishlist ]*****************");
 
-  let fcmToken = req.body.fcmToken;
+  // let fcmToken = req.body.fcmToken;
   let emailId = req.body.emailId;
   let productId = req.body.productId;
 
@@ -60,8 +60,7 @@ let removefromWishlist = async (req, res) => {
 
   if (emailId) {
     try {
-      let userDetails = await checkAndUpdateUserDetails(fcmToken, emailId);
-      if (userDetails.user) {
+      if (emailId) {
         let response = await removefromWishlistService(emailId, productId);
         res.send(response);
       } else {

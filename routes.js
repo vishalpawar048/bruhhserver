@@ -4,6 +4,7 @@ const banners = require("./controller/banners");
 const categories = require("./controller/categories");
 const wishlist = require("./controller/wishlist");
 const user = require("./controller/user");
+const comments = require("./controller/comments");
 const multer = require("multer");
 const upload = multer({ dest: "tmp/csv/" });
 
@@ -50,6 +51,16 @@ route.get("/wishlist/getWishlist/:emailId", wishlist.getWishlist);
 
 //Save User
 route.post("/user/saveUserDetail", user.saveUserDetail);
+
+//comments
+
+route.post("/comments/addWebsiteComment", comments.addWebsiteComment);
+route.post("/comments/addProductComment", comments.addProductComment);
+route.post("/comments/getWebsiteComments", comments.getWebsiteComments);
+route.post("/comments/getProductComments", comments.getProductComments);
+route.post("/comments/deleteWebsiteCommentById", comments.deleteWebsiteCommentById);
+route.post("/comments/deleteProductCommentById", comments.deleteProductCommentById);
+
 
 
 
