@@ -1,37 +1,40 @@
 var mongoose = require("mongoose");
 
-var productSchema = new mongoose.Schema({
-  name: String,
-  price: String,
-  website: String,
-  imgUrls: Array,
-  category: String,
-  subCategory: String,
-  keywords: String,
-  rating: String,
-  description: String,
-  url: { type: String, unique: true },
-  createdAt: Date,
-});
+var productSchema = new mongoose.Schema(
+  {
+    name: String,
+    price: String,
+    website: String,
+    imgUrls: Array,
+    category: String,
+    subCategory: String,
+    keywords: String,
+    rating: String,
+    description: String,
+    url: { type: String, unique: true },
+    // createdAt: Date,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
 productSchema.index(
   {
     name: "text",
     description: "text",
     keywords: "text",
-    website: "text"
+    website: "text",
   },
   {
     weights: {
       name: 5,
       keywords: 4,
-      description: 1
-    }
+      description: 1,
+    },
   }
 );
 
 var newKeywordsSchema = new mongoose.Schema({
-  query: String
+  query: String,
 });
 
 // var BannerSchema = new mongoose.Schema({
@@ -45,7 +48,7 @@ var newKeywordsSchema = new mongoose.Schema({
 
 var BannerSchema = new mongoose.Schema({
   type: String,
-  banners: Array
+  banners: Array,
 });
 
 var CategorySchema = new mongoose.Schema({
@@ -53,55 +56,68 @@ var CategorySchema = new mongoose.Schema({
   imgUrl: { type: Array, unique: true },
   category: String,
   keyword: String,
-  sequence: { type: String, unique: true }
+  sequence: { type: String, unique: true },
 });
 
-var userSchema = new mongoose.Schema({
-  name: String,
-  emailId: String,
-  gender: String,
-  fcmToken: String,
-  date: String
-},{ timestamps: { createdAt: 'created_at' }});
+var userSchema = new mongoose.Schema(
+  {
+    name: String,
+    emailId: String,
+    gender: String,
+    fcmToken: String,
+    date: String,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
-var wishlistSchema = new mongoose.Schema({
-  emailId: String,
-  wishlist: Array,
-  gender: String
-});
+var wishlistSchema = new mongoose.Schema(
+  {
+    emailId: String,
+    wishlist: Array,
+    gender: String,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
-var websiteSchema = new mongoose.Schema({
-  name:String,
-  deliveryRating: String,
-  returnPolicy: String,
-  productsQuality: String,
-  logo: String,
-  description: String,
-  createdAt: Date,
-});
+var websiteSchema = new mongoose.Schema(
+  {
+    name: String,
+    deliveryRating: String,
+    returnPolicy: String,
+    productsQuality: String,
+    logo: String,
+    description: String,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
-var websiteCommentsSchema = new mongoose.Schema({
-  website: String,
-  userId: String,
-  emailId:String,
-  comment:String,
-  websiteRating: String,
-  productsQualityRating: String,
-  deliveryRating: String,
-  returnPolicyRating:String,
-  createdAt: Date,
-});
+var websiteCommentsSchema = new mongoose.Schema(
+  {
+    website: String,
+    userId: String,
+    emailId: String,
+    comment: String,
+    websiteRating: String,
+    productsQualityRating: String,
+    deliveryRating: String,
+    returnPolicyRating: String,
+    // createdAt: Date,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
-var productCommentsSchema = new mongoose.Schema({
-  productId:String,
-  name: String,
-  website: String,
-  userId: String,
-  emailId:String,
-  comment:String,
-  productRating: String,
-  createdAt: Date,
-});
+var productCommentsSchema = new mongoose.Schema(
+  {
+    productId: String,
+    name: String,
+    website: String,
+    userId: String,
+    emailId: String,
+    comment: String,
+    productRating: String,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
 
 var Product = mongoose.model("Product", productSchema);
 var Website = mongoose.model("Website", websiteSchema);
@@ -119,8 +135,6 @@ var Wishlist = mongoose.model("Wishlist", wishlistSchema);
 var WebsiteComments = mongoose.model("WebsiteComments", websiteCommentsSchema);
 var ProductComments = mongoose.model("ProductComments", productCommentsSchema);
 
-
-
 module.exports = {
   Product,
   MenProduct,
@@ -133,5 +147,5 @@ module.exports = {
   Wishlist,
   Website,
   WebsiteComments,
-  ProductComments
+  ProductComments,
 };
