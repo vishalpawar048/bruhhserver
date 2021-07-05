@@ -17,7 +17,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded());
 app.use(cors());
 app.use(bodyParser.json());
-app.use("/", router);
+app.use("/api", router);
 
 //Uncommente this line for production
 // httpsServer.listen(port, () =>
