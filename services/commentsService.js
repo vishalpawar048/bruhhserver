@@ -1,6 +1,7 @@
 const {
     WebsiteComments,
-    ProductComments
+    ProductComments,
+    UserFeedback
 } = require("../model/schema");
 
 
@@ -22,6 +23,27 @@ let addWebsiteCommentToDb = (obj) => {
         });
     });
 };
+
+let addUserFeedbackToDb = (obj) => {
+    
+    var userFeedback = new UserFeedback(obj);
+    return new Promise((resolve, reject) => {
+        userFeedback.save(function (err, result) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(
+                    (response = {
+                        Product: result,
+                        Status: `Feedback saved Successfully `,
+                    })
+                );
+            }
+        });
+    });
+};
+
+
 
 let addProductCommentToDB = (obj) => {
     var productComments = new ProductComments(obj);
@@ -104,5 +126,6 @@ module.exports = {
     getWebsiteCommentService,
     getProductCommentsService,
     deleteProductCommentByIdService,
-    deleteWebsiteCommentByIdService
+    deleteWebsiteCommentByIdService,
+    addUserFeedbackToDb
 };

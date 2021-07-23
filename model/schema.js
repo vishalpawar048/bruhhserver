@@ -106,6 +106,15 @@ var websiteCommentsSchema = new mongoose.Schema(
   { timestamps: { createdAt: "created_at" } }
 );
 
+var UserFeedbackSchema = new mongoose.Schema(
+  {
+    rating: String,
+    feedback: String,
+    liked: String,
+  },
+  { timestamps: { createdAt: "created_at" } }
+);
+
 var productCommentsSchema = new mongoose.Schema(
   {
     productId: String,
@@ -134,6 +143,9 @@ var Wishlist = mongoose.model("Wishlist", wishlistSchema);
 
 var WebsiteComments = mongoose.model("WebsiteComments", websiteCommentsSchema);
 var ProductComments = mongoose.model("ProductComments", productCommentsSchema);
+var UserFeedback = mongoose.model("UserFeedback", UserFeedbackSchema);
+
+
 
 module.exports = {
   Product,
@@ -148,4 +160,5 @@ module.exports = {
   Website,
   WebsiteComments,
   ProductComments,
+  UserFeedback
 };

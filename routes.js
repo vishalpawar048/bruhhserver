@@ -60,6 +60,9 @@ route.post("/comments/getWebsiteComments", comments.getWebsiteComments);
 route.post("/comments/getProductComments", comments.getProductComments);
 route.post("/comments/deleteWebsiteCommentById", comments.deleteWebsiteCommentById);
 route.post("/comments/deleteProductCommentById", comments.deleteProductCommentById);
+route.post("/comments/userFeedback", comments.userFeedback);
+
+
 
 
 

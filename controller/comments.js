@@ -169,6 +169,32 @@ let deleteWebsiteCommentById = async (req, res) => {
   }
 };
 
+let userFeedback = async (req, res) => {
+  console.log("****************[ userFeedback ]*****************");
+
+  let obj = {
+    rating: req.body.rating,
+    feedback: req.body.feedback,
+    liked: req.body.liked,
+  };
+  let response;
+
+  if (obj) {
+    try {
+      let response = await service.addUserFeedbackToDb(obj);
+      res.send(response);
+    } catch (error) {
+      res.send(error);
+    }
+  } else {
+    response = {
+      // website: website,
+      Status: "Internal Server error at userFeedback",
+    };
+    res.send(response);
+  }
+};
+
 module.exports = {
   addWebsiteComment,
   addProductComment,
@@ -176,4 +202,5 @@ module.exports = {
   getProductComments,
   deleteWebsiteCommentById,
   deleteProductCommentById,
+  userFeedback
 };
